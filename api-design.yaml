@@ -1,0 +1,402 @@
+openapi: 3.0.4
+info:
+  title: E-Commerce App
+  description: This documentation contains all the API endpoints which our frontend can use to request data from the database.
+  version: 0.0.1
+servers:
+  - url: https://www.localhost.com:5000
+    description: This is just a placeholder for database URL, and has no real purpose as on now
+paths:
+# Products path
+  /products:
+    get:
+      tags:
+        - products
+      summary: Return a list of products
+      description: This will return all the products (in-stock / out-of-stock) in our database
+      operationId: getProducts
+      responses:
+        "200":
+          description: Response successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductFull'
+                example:
+                  id: 1
+                  name: shoe
+                  description: reebok shoe
+                  in-stock: true
+                  price: 24.99
+                  category_id: 2674
+    post:
+      summary: Create a new product
+      description: Using the provided data create a new product
+      operationId: createNewProduct
+      tags:
+        - products
+      requestBody: 
+        description: Data received for new product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductFull'
+      responses:
+        "201":
+          description: Create successful
+    patch:
+      tags:
+        - products
+      summary: Editing a specific product
+      description: Update product matching productId
+      operationId: updateProductById
+      requestBody:
+        description: Update product using productId
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+      responses:
+        "200":
+          description: Update successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFull'
+  /products/{productId}:
+    parameters:
+      - $ref: '#/components/parameters/productId'
+    get:
+      summary: Return a specific product
+      description: Returns a single product by its unique ID
+      operationId: getProductsById
+      tags:
+        - products
+      responses:
+        "200":
+          description: Response successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFull'
+              example:
+                id: 1
+                name: shoe
+                description: reebok shoe
+                in-stock: true
+                price: 24.99
+                category_id: 2674
+    delete:
+      tags:
+        - products
+      summary: Delete a specific product
+      description: >-
+        Delete the product with matching product id and returns that product as responses
+      operationId: deleteProductById
+      responses:
+        "204":
+          description: Delete successful
+
+# Customer path
+  /customers:
+    get:
+      tags:
+      - customers
+      summary: Get all customer detail
+      description: This will return all registered customer detail
+      operationId: getCustomers
+      responses:
+        "200":
+          description: Response successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerFull'
+    post:
+      tags:
+        - customers
+      summary: Create a new customer
+      description: Receive a request body containing data for the new customer to be created
+      operationId: createNewCustomer
+      requestBody:
+        description: Contains the object data for the new customer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerFull'
+      responses:
+        "201":
+          description: Create successful
+    patch:
+      tags:
+        - customers
+      summary: Update a specific customer
+      description: >-
+        request a customer object as per customer id for changes as mentioned in request body
+      operationId: updateCustomerById
+      requestBody:
+        description: contain a customer id and properties (key-value pair)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerUpdate'
+      responses:
+        "204":
+          description: Update successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerFull'
+  /customers/{customerId}:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
+    get:
+      tags:
+      - customers
+      summary: Get specific customer detail
+      description: This will return a registered customer detail
+      operationId: getCustomersById
+      responses:
+        "200":
+          description: Response successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerFull'
+    delete:
+      tags:
+        - customers
+      summary: Delete specific customer from database
+      description: Delete a customer that matches customer id
+      operationId: deleteCustomerById
+      responses:
+        "204":
+          description: Delete successful
+# Orders path
+  /orders/{customerId}:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
+    get:
+      tags:
+        - orders
+      summary: Get all orders of a specific customer
+      description: Get all orders related to a customer using customer id
+      operationId: getCustomerOrders
+      responses:
+        "200":
+          description: Response successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderFull'
+  /orders/{customerId}/{orderId}:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
+      - $ref: '#/components/parameters/orderId'
+    get:
+      tags:
+        - orders
+      summary: Get a specific order of a customer
+      description: Get a specific order related to a customer using both customer and order id
+      operationId: getCustomerOrderById
+      responses:
+        "200":
+          description: Response successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderFull'
+    patch:
+      tags:
+        - orders
+      summary: Update order details of a specific order
+      description: >-
+        Update a specific orders detail matching order id for a customer matching customer id
+      operationId: updateCustomerOrderById
+      requestBody:
+        description: >-
+          Receive a update request for a customer and order id along with requested changes
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderUpdate'
+      responses:
+        "200":
+          description: Update successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderFull'
+    delete:
+      tags:
+        - orders
+      summary: Delete a specific order of a customer
+      description: >-
+       Delete a specific order related to a customer using both customer and order id
+      operationId: deleteCustomerOrderById
+      responses:
+        "204":
+          description: Delete successful
+# Cart path
+  /cart/{customerId}:
+    parameters:
+      - $ref: '#/components/parameters/customerId'
+    get:
+      tags:
+        - cart
+      summary:
+      description:
+      responses:
+        "200":
+          description: Response successful
+    post:
+      tags:
+        - cart
+      summary:
+      description:
+      responses:
+        "201":
+          description: Create successful
+    patch:
+      tags:
+        - cart
+      summary:
+      description:
+      responses:
+        "200":
+          description: Update successful
+    delete:
+      tags:
+        - cart
+      summary:
+      description:
+      responses:
+        "204":
+          description: Delete successful
+components:
+  parameters: 
+    productId:
+      name: productId
+      in: path
+      required: true
+      schema:
+        type: integer
+    customerId:
+      name: customerId
+      in: path
+      required: true
+      schema:
+        type: integer
+    orderId:
+      in: path
+      name: orderId
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        about:
+          type: string
+        in_stock:
+          type: boolean
+        price:
+          type: number
+        category_id:
+          type: integer
+    ProductFull: # This is makes Product schema fully required
+      allOf:
+        - $ref: '#/components/schemas/Product'
+        - type: object
+          required:
+            - id
+            - name
+            - description
+            - in_stock
+            - price
+            - category_id
+    ProductUpdate: # This will make Product schema have id as required
+      allOf:
+        - $ref: '#/components/schemas/Product'
+        - type: object
+          required:
+          - id
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+    CustomerFull:
+      allOf:
+        - $ref: '#/components/schemas/Customer'
+        - type: object
+          required:
+            - id
+            - name
+            - phone
+            - email
+            - address
+    CustomerUpdate:
+      allOf:
+        - $ref: '#/components/schemas/Customer'
+        - type: object
+          required:
+            - id
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        delivery_address:
+          type: string
+        delivery_status:
+          type: string
+        contact_person:
+          type: string
+        payment_status:
+          type: string
+    OrderFull:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - type: object
+          required:
+            - id
+            - delivery_address
+            - delivery_status
+            - contact_person
+            - payment_status
+    OrderUpdate:
+      allOf:
+        - $ref: '#/components/schemas/Order'
+        - type: object
+          required:
+            - id
+
+        
+
+tags:
+  - name: products
+    description: contains all api endpoints related to products
+  - name: customers
+    description: contains all api endpoints related to customers
+  - name: orders
+    description: contains all api endpoints related to orders
+  - name: cart
+    description: contains all api endpoints related to cart
