@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/SoraK93/Project_e-commerce#readme",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.2.1"
   }
 }
