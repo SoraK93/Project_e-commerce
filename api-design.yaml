@@ -248,32 +248,54 @@ paths:
     get:
       tags:
         - cart
-      summary:
-      description:
+      summary: Get all the products inside a customer cart
+      description: Requesting cart related to a specific customer
+      operationId: getCustomerCart
       responses:
         "200":
           description: Response successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CartFull'
     post:
       tags:
         - cart
-      summary:
-      description:
+      summary: Create a product to a customer cart
+      description: Receive product detail and quantity 
+      operationId: createCustomerCart
+      requestBody:
+        description: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartFull'
       responses:
         "201":
           description: Create successful
     patch:
       tags:
         - cart
-      summary:
-      description:
+      summary: Update Cart items
+      description: Receive request to either remove product or increase/decrease quantity
+      operationId: updateCustomerCart
+      requestBody:
+        description: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartUpdate'
       responses:
         "200":
           description: Update successful
     delete:
       tags:
         - cart
-      summary:
-      description:
+      summary: Delete all products from a customers cart
+      description: Receive request to remove all the items in a customers cart
+      operationId: deleteCustomerCart
       responses:
         "204":
           description: Delete successful
@@ -388,7 +410,29 @@ components:
         - type: object
           required:
             - id
-
+    Cart:
+      type: object
+      properties:
+        product_name:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: number
+    CartFull:
+      allOf:
+        - $ref: '#/components/schemas/Cart'
+        - type: object
+          required:
+            - product_name
+            - quantity
+            - price
+    CartUpdate:
+      allOf:
+        - $ref: '#/components/schemas/Cart'
+        - type: object
+          required:
+            - quantity
         
 
 tags:
