@@ -3,19 +3,19 @@ import pool from "../model/database"
 
 const cart = express.Router();
 
-cart.get("/", (req, res, next) => {
+cart.get("/:customerId", (req, res, next) => {
   res.send();
 });
 
-cart.post("/", (req, res, next) => {
+cart.post("/:customerId", (req, res, next) => {
   res.send();
 });
 
-cart.patch("/", (req, res, next) => {
+cart.patch("/:customerId", (req, res, next) => {
   res.send();
 });
 
-cart.delete("/", (req, res, next) => {
+cart.delete("/:customerId", (req, res, next) => {
   res.send();
 });
 
