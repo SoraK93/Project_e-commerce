@@ -1,4 +1,5 @@
 const express = require("express");
+import pool from "../model/database"
 
 const customer = express.Router();
 
