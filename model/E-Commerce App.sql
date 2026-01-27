@@ -12,18 +12,18 @@ CREATE TABLE "categories" (
 );
 
 CREATE TABLE "product_category" (
-  "products_id" int,
-  "categories_id" int
+  "products_id" uuid,
+  "categories_id" uuid
 );
 
 CREATE TABLE "orders" (
   "order_id" uuid PRIMARY KEY,
-  "customers_id" int UNIQUE
+  "customers_id" uuid UNIQUE
 );
 
 CREATE TABLE "order_details" (
   "id" uuid PRIMARY KEY,
-  "product_id" int UNIQUE,
+  "product_id" uuid UNIQUE,
   "quantity" integer DEFAULT 1,
   "payment_status" bool,
   "payment_mode" varchar,
@@ -32,7 +32,7 @@ CREATE TABLE "order_details" (
 );
 
 CREATE TABLE "delivery_details" (
-  "order_id" int UNIQUE,
+  "order_id" uuid UNIQUE,
   "delivery_address" varchar,
   "delivery_status" varchar,
   "contact_person" varchar
