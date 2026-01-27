@@ -1,21 +1,25 @@
 const express = require("express");
-import pool from "../model/database"
+import pool from "../model/database";
 
 const order = express.Router();
 
-order.get("/", (req, res, next) => {
+order.get("/:customerId", (req, res, next) => {
   res.send();
 });
 
-order.post("/", (req, res, next) => {
+order.get("/:customerId/:orderId", (req, res, next) => {
   res.send();
 });
 
-order.patch("/", (req, res, next) => {
+order.post("/:customerId", (req, res, next) => {
   res.send();
 });
 
-order.delete("/", (req, res, next) => {
+order.patch("/:customerId/:orderId", (req, res, next) => {
+  res.send();
+});
+
+order.delete("/:customerId/:orderId", (req, res, next) => {
   res.send();
 });
 
