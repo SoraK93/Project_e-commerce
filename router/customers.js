@@ -1,5 +1,5 @@
 const express = require("express");
-import pool from "../model/database";
+const pool = require("../server")
 
 const customer = express.Router();
 
