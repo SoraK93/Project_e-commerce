@@ -14,6 +14,9 @@ const app = express();
 
 const port = process.env.SERVER_PORT;
 
+// app middleware
+app.use(express.json());
+
 // route middleware
 app.use("/product", productRouter);
 app.use("/order", orderRouter);
