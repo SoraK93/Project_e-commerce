@@ -20,6 +20,11 @@ app.use("/order", orderRouter);
 app.use("/customer", customerRouter);
 app.use("/cart", cartRouter);
 
+// Error handling
+app.use((err, req, res, next) => {
+  res.json(err)
+})
+
 app.listen(port, (err) => {
   if (err) {
     console.error(err);
