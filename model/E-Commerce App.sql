@@ -1,29 +1,23 @@
 CREATE TABLE "products" (
   "id" uuid PRIMARY KEY,
-  "name" varchar,
-  "description" text,
-  "in_stock" int,
-  "price" real
+  "name" varchar NOT NULL,
+  "description" text NOT NULL,
+  "in_stock" int NOT NULL,
+  "price" real NOT NULL,
+  "seller_id" uuid,
+  CONSTRAINT "check_stock" CHECK (in_stock > 0)
 );
 
-CREATE TABLE "categories" (
-  "id" uuid PRIMARY KEY,
-  "name" varchar
-);
-
-CREATE TABLE "product_category" (
-  "products_id" uuid,
-  "categories_id" uuid
-);
-
-CREATE TABLE "orders" (
-  "order_id" uuid PRIMARY KEY,
-  "customers_id" uuid UNIQUE
+CREATE TABLE "cart" (
+  "product_id" uuid,
+  "customer_id" uuid,
+  "quantity" integer DEFAULT 1
 );
 
 CREATE TABLE "order_details" (
   "id" uuid PRIMARY KEY,
-  "product_id" uuid UNIQUE,
+  "product_id" uuid,
+  "customer_id" uuid,
   "quantity" integer DEFAULT 1,
   "payment_status" bool,
   "payment_mode" varchar,
@@ -31,37 +25,21 @@ CREATE TABLE "order_details" (
   CONSTRAINT "check_cart_quantity" CHECK (quantity > 0)
 );
 
-CREATE TABLE "delivery_details" (
-  "order_id" uuid UNIQUE,
-  "delivery_address" varchar,
-  "delivery_status" varchar,
-  "contact_person" varchar
-);
-
 CREATE TABLE "customers_details" (
   "id" uuid PRIMARY KEY,
-  "name" varchar,
-  "phone" varchar,
-  "email" varchar UNIQUE,
-  "address" text
+  "name" varchar NOT NULL,
+  "phone" varchar UNIQUE NOT NULL,
+  "email" varchar UNIQUE NOT NULL,
+  "password" uuid NOT NULL,
+  "address" text NOT NULL
 );
-
-CREATE INDEX "product_category_product_id_categories_id_index" ON "product_category" ("products_id", "categories_id");
 
 COMMENT ON TABLE "products" IS 'Stores all product related data';
 
-COMMENT ON TABLE "categories" IS 'Stores all category types a product can relate too';
-
-COMMENT ON TABLE "product_category" IS 'Products can be searched based on its category';
-
-ALTER TABLE "product_category" ADD FOREIGN KEY ("products_id") REFERENCES "products" ("id");
-
-ALTER TABLE "product_category" ADD FOREIGN KEY ("categories_id") REFERENCES "categories" ("id");
-
 ALTER TABLE "order_details" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
-ALTER TABLE "orders" ADD FOREIGN KEY ("customers_id") REFERENCES "customers_details" ("id") ON DELETE CASCADE;
+ALTER TABLE "cart" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
-ALTER TABLE "delivery_details" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("order_id") ON DELETE CASCADE;
+ALTER TABLE "cart" ADD FOREIGN KEY ("customer_id") REFERENCES "customers_details" ("id");
 
-ALTER TABLE "orders" ADD FOREIGN KEY ("order_id") REFERENCES "order_details" ("id") ON DELETE CASCADE;
+ALTER TABLE "order_details" ADD FOREIGN KEY ("customer_id") REFERENCES "customers_details" ("id");
