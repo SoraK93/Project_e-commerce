@@ -25,8 +25,10 @@ app.use("/cart", cartRouter);
 
 // Error handling
 app.use((err, req, res, next) => {
-  res.json(err)
-})
+  res
+    .status(err.status || 500)
+    .json({ error: err.message || "Internal server error" });
+});
 
 app.listen(port, (err) => {
   if (err) {

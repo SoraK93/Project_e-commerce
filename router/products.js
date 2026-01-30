@@ -43,25 +43,23 @@ product.patch("/:productId", async (req, res, next) => {
 
   let index = 0;
 
-  try {
-    for (let key in req.body) {
-      if (key === "id" || key === "seller_id") {
-        res.status(400).json({ error: `Invalid request, ${key} not found.` });
-      }
-      index++;
-      updateFields.push(`${key} = $${index}`);
-      updateValues.push(req.body[key]);
+  for (let key in req.body) {
+    if (key === "id" || key === "seller_id") {
+      const err = new Error(`Invalid request: ${key} cannot be updated.`);
+      err.status = 400;
+      return next(err);
     }
-
-    const result = await pool.query(
-      `UPDATE products SET ${updateFields.join(", ")} WHERE id = $${updateValues.length + 1}`,
-      [...updateValues, productId],
-    );
-
-    res.status(204).json({ message: "update successful" });
-  } catch (err) {
-    next(err);
+    index++;
+    updateFields.push(`${key} = $${index}`);
+    updateValues.push(req.body[key]);
   }
+
+  const result = await pool.query(
+    `UPDATE products SET ${updateFields.join(", ")} WHERE id = $${updateValues.length + 1}`,
+    [...updateValues, productId],
+  );
+
+  res.status(204).json({ message: "update successful" });
 });
 
 product.delete("/:productId", (req, res, next) => {
