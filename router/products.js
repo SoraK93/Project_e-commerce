@@ -62,8 +62,21 @@ product.patch("/:productId", async (req, res, next) => {
   res.status(204).json({ message: "update successful" });
 });
 
-product.delete("/:productId", (req, res, next) => {
-  res.send();
+product.delete("/:productId", async (req, res, next) => {
+  const productId = req.params.productId;
+
+  const result = await pool.query(
+    "DELETE FROM products WHERE id = $1 RETURNING *",
+    [productId],
+  );
+
+  if (result.rowCount === 0) {
+    const err = new Error("Product not found");
+    err.status = 404;
+    return next(err);
+  }
+  
+  res.status(200).send(result);
 });
 
 module.exports = product;
