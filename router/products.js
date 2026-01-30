@@ -6,10 +6,11 @@ const product = express.Router();
 
 // requests all products in the database
 product.get("/", async (req, res, next) => {
-    const result = await pool.query("SELECT * FROM products");
-    res.send(result.rows);
+  const result = await pool.query("SELECT * FROM products");
+  res.send(result.rows);
 });
 
+// request for a specific product in the database
 product.get("/:productId", async (req, res, next) => {
   const productId = req.params.productId;
 
@@ -33,8 +34,34 @@ product.post("/", async (req, res, next) => {
   res.status(201).json({ message: "create successful" });
 });
 
-product.patch("/", (req, res, next) => {
-  res.send();
+// request update for a specific product in database
+product.patch("/:productId", async (req, res, next) => {
+  const productId = req.params.productId;
+
+  const updateFields = [];
+  const updateValues = [];
+
+  let index = 0;
+
+  try {
+    for (let key in req.body) {
+      if (key === "id" || key === "seller_id") {
+        res.status(400).json({ error: `Invalid request, ${key} not found.` });
+      }
+      index++;
+      updateFields.push(`${key} = $${index}`);
+      updateValues.push(req.body[key]);
+    }
+
+    const result = await pool.query(
+      `UPDATE products SET ${updateFields.join(", ")} WHERE id = $${updateValues.length + 1}`,
+      [...updateValues, productId],
+    );
+
+    res.status(204).json({ message: "update successful" });
+  } catch (err) {
+    next(err);
+  }
 });
 
 product.delete("/:productId", (req, res, next) => {
