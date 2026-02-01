@@ -1,6 +1,7 @@
 const express = require("express");
 const pool = require("../model/database");
 const { v4: uuidv4 } = require("uuid");
+const queryReturnError = require("../utility/api-errors");
 
 const product = express.Router();
 
@@ -45,9 +46,9 @@ product.patch("/:productId", async (req, res, next) => {
 
   for (let key in req.body) {
     if (key === "id" || key === "seller_id") {
-      const err = new Error(`Invalid request: ${key} cannot be updated.`);
-      err.status = 400;
-      return next(err);
+      return next(
+        queryReturnError(`Invalid request: ${key} cannot be updated.`, 400),
+      );
     }
     index++;
     updateFields.push(`${key} = $${index}`);
@@ -71,11 +72,9 @@ product.delete("/:productId", async (req, res, next) => {
   );
 
   if (result.rowCount === 0) {
-    const err = new Error("Product not found");
-    err.status = 404;
-    return next(err);
+    return next(queryReturnError("Product not found", 404));
   }
-  
+
   res.status(200).send(result);
 });
 
