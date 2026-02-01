@@ -1,5 +1,5 @@
 const express = require("express");
-const {pool} = require("../model/database");
+const pool = require("../model/database");
 
 const order = express.Router();
 
