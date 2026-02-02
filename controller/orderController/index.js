@@ -1,7 +1,6 @@
-const { createCartQuery } = require("../../utility/api-helper");
-const { genPatchRouteQueryList } = require("../../utility/api-helper");
+const { createCartQuery, genPatchRouteQueryList } = require("../../utility/api-helper");
 const pool = require("../../model/database");
-const queryReturnError = require("../utility/api-errors");
+const queryReturnError = require("../../utility/api-errors");
 const { v4: uuidv4 } = require("uuid");
 
 const dependencies = {
