@@ -22,7 +22,7 @@ function genPatchRouteQueryList(data, next) {
 }
 
 // used by order route to create select query
-function createOrderQuery(route, orderId=false) {
+function createOrderQuery(route, orderId = false) {
   const orderColumns = "quantity, payment_status, payment_mode";
   const productColumns = "products.name, products.price";
 
@@ -37,9 +37,13 @@ function createOrderQuery(route, orderId=false) {
         query += " AND order_details.id = $2";
       }
       break;
+    case "post":
+      query = "INSERT INTO order_details VALUES ($1, $2, $3, $4, $5, $6, $7)";
+      break;
     case "patch":
-      query = `UPDATE order_details SET payment_status = $1, payment_mode = $2 
-      WHERE customer_id = $3 AND id = $4`;
+      query =
+        "UPDATE order_details SET payment_status = $1, payment_mode = $2 \
+      WHERE customer_id = $3 AND id = $4";
       break;
     case "delete":
       query = `DELETE FROM order_details WHERE id = $1 AND customer_id = $2 
