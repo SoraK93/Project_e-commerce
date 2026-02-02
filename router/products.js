@@ -2,6 +2,7 @@ const express = require("express");
 const pool = require("../model/database");
 const { v4: uuidv4 } = require("uuid");
 const queryReturnError = require("../utility/api-errors");
+const { genPatchRouteQueryList } = require("../utility/api-helper");
 
 const product = express.Router();
 
@@ -39,21 +40,7 @@ product.post("/", async (req, res, next) => {
 product.patch("/:productId", async (req, res, next) => {
   const productId = req.params.productId;
 
-  const updateFields = [];
-  const updateValues = [];
-
-  let index = 0;
-
-  for (let key in req.body) {
-    if (key === "id" || key === "seller_id") {
-      return next(
-        queryReturnError(`Invalid request: ${key} cannot be updated.`, 400),
-      );
-    }
-    index++;
-    updateFields.push(`${key} = $${index}`);
-    updateValues.push(req.body[key]);
-  }
+  const [updateFields, updateValues] = genPatchRouteQueryList(req.body, next);
 
   const result = await pool.query(
     `UPDATE products SET ${updateFields.join(", ")} WHERE id = $${updateValues.length + 1}`,
