@@ -5,6 +5,7 @@ const {
   createOrderQuery,
   genPatchRouteQueryList,
 } = require("../utility/api-helper");
+const { v4: uuidv4 } = require("uuid");
 
 const order = express.Router();
 
@@ -35,9 +36,24 @@ order.get("/:customerId/:orderId", async (req, res, next) => {
   res.json(result.rows);
 });
 
-order.post("/:customerId", (req, res, next) => {
-  const customerId = req.params.customerId;
-  res.send();
+order.post("/:customerId", async (req, res, next) => {
+  const c_Id = req.params.customerId;
+  const {
+    product_id: p_id,
+    quantity,
+    payment_status: pay_status,
+    payment_mode: pay_mode,
+  } = req.body;
+
+  const id = uuidv4();
+  const ordered_on = new Date().toLocaleString();
+
+  const orderQuery = createOrderQuery("post");
+  const value = [id, p_id, c_Id, quantity, pay_status, pay_mode, ordered_on];
+
+  const result = await pool.query(orderQuery, value);
+
+  res.status(201).json({ message: "Create successfuly" });
 });
 
 order.patch("/:customerId/:orderId", async (req, res, next) => {
@@ -46,7 +62,6 @@ order.patch("/:customerId/:orderId", async (req, res, next) => {
 
   const [_, updateValues] = genPatchRouteQueryList(req.body);
   const orderQuery = createOrderQuery("patch");
-
 
   const result = await pool.query(orderQuery, [
     ...updateValues,
