@@ -54,4 +54,22 @@ function createOrderQuery(route, orderId = false) {
   return query;
 }
 
-module.exports = { genPatchRouteQueryList, createOrderQuery };
+function createCartQuery(route) {
+  let query;
+
+  switch (route) {
+    case "get":
+      query =
+        "SELECT products.name, cart.quantity, products.price \
+        FROM cart INNER JOIN products ON cart.product_id = products.id \
+        WHERE cart.customer_id = $1";
+      break;
+    case "delete":
+      query = "DELETE FROM cart WHERE customer_id = $1 AND product_id = $2";
+      break;
+  }
+
+  return query;
+}
+
+module.exports = { genPatchRouteQueryList, createOrderQuery, createCartQuery };
