@@ -1,22 +1,18 @@
 const express = require("express");
-const pool = require("../model/database");
-
+const {
+  getAllCart,
+  deleteCartItem,
+  createNewCart,
+  updateCart,
+} = require("../controller/cartController/index");
 const cart = express.Router();
 
-cart.get("/:customerId", (req, res, next) => {
-  res.send();
-});
+cart.get("/:customerId", getAllCart);
 
-cart.post("/:customerId", (req, res, next) => {
-  res.send();
-});
+cart.post("/:customerId", createNewCart);
 
-cart.patch("/:customerId", (req, res, next) => {
-  res.send();
-});
+cart.patch("/:customerId", updateCart);
 
-cart.delete("/:customerId", (req, res, next) => {
-  res.send();
-});
+cart.delete("/:customerId", deleteCartItem);
 
 module.exports = cart;
