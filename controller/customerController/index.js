@@ -7,7 +7,6 @@ const dependencies = { pool, queryReturnError, genPatchRouteQueryList };
 module.exports = {
   getCustomers: require("./_getCustomers")(dependencies),
   getCustomerById: require("./_getCustomerById")(dependencies),
-  createNewCustomer: require("./_createNewCustomer")(dependencies),
   updateCustomerById: require("./_updateCustomerById")(dependencies),
   deleteCustomerById: require("./_deleteCustomerById")(dependencies),
 };

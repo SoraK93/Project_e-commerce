@@ -10,5 +10,5 @@ module.exports =
       [...updateValues, customerId],
     );
 
-    res.status(204);
+    res.status(204).end();
   };
