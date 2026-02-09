@@ -3,9 +3,14 @@ module.exports =
   async (req, res, next) => {
     const productId = req.params.productId;
 
-    const result = await pool.query("SELECT * FROM products WHERE id = $1", [
+    const result = await pool.query("SELECT \
+      products.id, products.name AS product_name, products.description, \
+      products.in_stock, products. price, seller.name AS seller_name \
+      FROM products \
+      INNER JOIN customers_details AS seller \
+      ON seller.id = products.seller_id WHERE products.id = $1", [
       productId,
     ]);
 
-    res.status(200).json(result.rows[0]);
+    res.status(200).json(result.rows);
   };
