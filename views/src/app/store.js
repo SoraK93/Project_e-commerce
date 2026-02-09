@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import sampleReducer from "../features/sampleSlice";
+import { products } from "../features";
 
 export const store = configureStore({
   reducer: {
-    sample: sampleReducer,
+    products: products.reducer,
   },
 });
