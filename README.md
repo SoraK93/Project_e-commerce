@@ -14,11 +14,11 @@ npm start
 ```
 
 ## TODO List
-- Setup each routes with its appropriate requests and responses
+- ~~Setup each routes with its appropriate requests and responses~~
 - Setup common middleware for all the repetative param lookups
 - ~~Setup error handling in case of bad request or server issue~~
 - Setup a proper structure that identifies error code for backend to database data flow
-- Setup hashing for user login
+- ~~Setup hashing for user login~~
 - Setup authentication and authorisation
 - Setup session & cookie
 - Setup client connection & transaction for all database related requests
