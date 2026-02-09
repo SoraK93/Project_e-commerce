@@ -1,6 +1,7 @@
 // import packages
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 // import main api route
 const customerRouter = require("./customers");
@@ -15,6 +16,7 @@ const app = express();
 
 // app middleware
 app.use(express.json());
+app.use(cors())
 
 // route middleware
 app.use("/product", productRouter);

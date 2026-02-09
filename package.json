@@ -21,6 +21,7 @@
   "homepage": "https://github.com/SoraK93/Project_e-commerce#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "pg": "^8.17.2",
