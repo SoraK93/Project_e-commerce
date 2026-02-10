@@ -6,6 +6,6 @@ const queryReturnError = require("../../utility/api-errors");
 const dependencies = { pool, queryReturnError, uuidv4, bcrypt };
 
 module.exports = {
-  userLogin: require("./_userLogin")(dependencies),
-  userRegister: require("./_userRegister")(dependencies),
+  authLogin: require("./_authLogin")(dependencies),
+  authRegister: require("./_authRegister")(dependencies),
 };
