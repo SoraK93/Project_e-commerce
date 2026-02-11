@@ -1,10 +1,14 @@
 const express = require("express");
-const { authLogin, authRegister } = require("../controller/userController");
+const passport = require("passport");
+
+const { authLogin, authRegister, authLogout } = require("../controller/userController");
 
 const auth = express.Router();
 
-auth.get("/login", authLogin)
+auth.post("/login", passport.authenticate("local"), authLogin);
 
-auth.post("/register", authRegister)
+auth.post("/register", authRegister);
 
-module.exports = auth
+auth.post("/logout", authLogout)
+
+module.exports = auth;
