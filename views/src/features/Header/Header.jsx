@@ -1,3 +1,5 @@
+import { Link } from "react-router"
+
 const Header = () => {
   return (
     <header>
@@ -8,7 +10,7 @@ const Header = () => {
             <input type="text" placeholder="Search Bar" />
           </li>
           <li>cart icon</li>
-          <li>user</li>
+          <li><Link to="/auth/login">Login</Link></li>
         </ul>
       </nav>
     </header>
