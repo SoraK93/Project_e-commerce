@@ -1,7 +1,8 @@
-import { useLoaderData, useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { selectProduct } from "./productsSlice";
 
 export const ProductById = () => {
-  const product = useLoaderData()[0];
+  const product = useSelector(selectProduct.list)[0];
 
   return (
     <div>
