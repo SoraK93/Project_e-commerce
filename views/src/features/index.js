@@ -12,8 +12,14 @@ const products = {
   select: selectProduct,
   api: {
     getAllProduct,
-    getProductById
+    getProductById,
   },
 };
 
-export { Footer, Header, products, ErrorPage };
+import { Login } from "./LoginRegisterPage/Login";
+import { Register } from "./LoginRegisterPage/Register";
+const auth = {
+  component: { Login, Register },
+};
+
+export { Footer, Header, ErrorPage, products, auth };
