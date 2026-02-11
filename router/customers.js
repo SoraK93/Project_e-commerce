@@ -5,15 +5,16 @@ const {
   updateCustomerById,
   deleteCustomerById,
 } = require("../controller/customerController");
+const { checkOwnerShip } = require("../utility/api-auth");
 
 const customer = express.Router();
 
-customer.get("/", getCustomers);
+customer.get("/", checkOwnerShip, getCustomers);
 
-customer.get("/:customerId", getCustomerById);
+customer.get("/:customerId", checkOwnerShip, getCustomerById);
 
-customer.patch("/:customerId", updateCustomerById);
+customer.patch("/:customerId", checkOwnerShip, updateCustomerById);
 
-customer.delete("/:customerId", deleteCustomerById);
+customer.delete("/:customerId", checkOwnerShip, deleteCustomerById);
 
 module.exports = customer;
