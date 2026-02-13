@@ -48,7 +48,16 @@ const deserialize = (id, done) => {
 
       if (!result.rowCount) return done(new Error("User not found"), null);
 
-      done(null, result.rows[0]);
+      result = result.rows[0];
+      const data = {
+        id: result.id,
+        name: result.name,
+        phone: result.phone,
+        address: result.address,
+        is_seller: result.is_seller,
+      };
+
+      done(null, data);
     },
   );
 };
@@ -76,10 +85,10 @@ const checkLoggedIn = (req, res, next) => {
 };
 
 const checkOwnerShip = (req, res, next) => {
-  const customerId = req.params.customerId;
+  const userId = req.params.userId;
   const currentUser = req.user;
 
-  if (currentUser.id === customerId) {
+  if (currentUser.id === userId) {
     return next();
   }
 
