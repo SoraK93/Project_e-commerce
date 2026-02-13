@@ -55,7 +55,7 @@ app.use(passport.session());
 // route middleware
 app.use("/product", productRouter);
 app.use("/order", checkLoggedIn, orderRouter);
-app.use("/customer", userRouter);
+app.use("/user", userRouter);
 app.use("/cart", checkLoggedIn, cartRouter);
 app.use("/auth", authRouter);
 
