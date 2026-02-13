@@ -1,24 +1,45 @@
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import { FormInput } from "../components";
+import { loginAPI } from "./loginRegisterAPI";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+
+  const handleChange = (field, value) => {
+    setLoginData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await loginAPI(loginData);
+      navigate("/");
+    } catch (error) {
+      console.error("Login failed:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    setLoginData((prev) => ({ ...prev, email: state?.email ?? "" }));
+  }, [state]);
+
   return (
     <div>
       <h1>Login Page</h1>
-      {/* add action attribute to form?? */}
-      <form method="POST">
-        <div>
-          <label htmlFor="email">
-            Email Address:{" "}
-            <input id="email" name="email" type="email" placeholder="E-Mail" required="true" autoComplete="false" />
-          </label>
-        </div>
-
-        <div>
-          <label htmlFor="password">
-            Password: <input id="password" name="password" type="password" required="true" />
-          </label>
-        </div>
-
+      <form method="POST" onSubmit={handleSubmit}>
+        <FormInput
+          name="email"
+          value={loginData.email}
+          setFunc={(val) => handleChange("email", val)}
+        />
+        <FormInput
+          name="password"
+          value={loginData.password}
+          setFunc={(val) => handleChange("password", val)}
+        />
         <button>Login</button>
       </form>
       <div>
