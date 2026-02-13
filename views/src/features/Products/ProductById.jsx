@@ -3,6 +3,7 @@ import { selectProduct } from "./productsSlice";
 
 export const ProductById = () => {
   const product = useSelector(selectProduct.list)[0];
+  if (!product) return null;
 
   return (
     <div>
