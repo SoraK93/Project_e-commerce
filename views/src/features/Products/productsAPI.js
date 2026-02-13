@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
-const ENDPOINT = "http://localhost:43576";
+import { ENDPOINT } from "../CONSTANT"
 
 export const getAllProduct = createAsyncThunk(
   "products/getAllProduct",
