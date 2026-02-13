@@ -7,7 +7,7 @@ const session = require("express-session");
 const passport = require("passport");
 
 // import main api route
-const customerRouter = require("./customers");
+const userRouter = require("./users");
 const cartRouter = require("./cart");
 const productRouter = require("./products");
 const orderRouter = require("./orders");
@@ -32,7 +32,12 @@ passport.deserializeUser(deserialize);
 // app middleware
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(
   session({
     secret: process.env.S_SECRET,
@@ -50,7 +55,7 @@ app.use(passport.session());
 // route middleware
 app.use("/product", productRouter);
 app.use("/order", checkLoggedIn, orderRouter);
-app.use("/customer", customerRouter);
+app.use("/customer", userRouter);
 app.use("/cart", checkLoggedIn, cartRouter);
 app.use("/auth", authRouter);
 
