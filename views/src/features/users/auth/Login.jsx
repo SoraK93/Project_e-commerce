@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { FormInput } from "../components";
+import { FormInput } from "../../components";
 import { loginAPI } from "./loginRegisterAPI";
 
 const Login = () => {

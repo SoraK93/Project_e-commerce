@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { FormInput, ToggleButton } from "../components";
+import { FormInput, ToggleButton } from "../../components";
 import { useState } from "react";
 import { registerAPI } from "./loginRegisterAPI";
 

@@ -1,4 +1,4 @@
-import { ENDPOINT } from "../CONSTANT";
+import { ENDPOINT } from "../../CONSTANT";
 
 const loginAPI = async (formData) => {
   const response = await fetch(`${ENDPOINT}/auth/login`, {
