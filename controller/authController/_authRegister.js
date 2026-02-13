@@ -14,10 +14,11 @@ module.exports =
       user.email,
       user.password,
       user.address,
+      user.isSeller
     ];
 
     const result = await pool.query(
-      "INSERT INTO customers_details VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      "INSERT INTO customers_details VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
       values,
     );
 
