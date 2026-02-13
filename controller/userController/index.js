@@ -1,13 +1,12 @@
-const bcrypt = require("bcrypt")
-const { v4: uuidv4 } = require("uuid");
-
 const pool = require("../../model/database");
 const queryReturnError = require("../../utility/api-errors");
+const genPatchRouteQueryList = require("../../utility/api-helper");
 
-const dependencies = { pool, queryReturnError, uuidv4, bcrypt };
+const dependencies = { pool, queryReturnError, genPatchRouteQueryList };
 
 module.exports = {
-  authLogin: require("./_authLogin"),
-  authRegister: require("./_authRegister")(dependencies),
-  authLogout: require("./_authLogout"),
+  getUsers: require("./_getUsers")(dependencies),
+  getUserById: require("./_getUserById")(dependencies),
+  updateUserById: require("./_updateUserById")(dependencies),
+  deleteUserById: require("./_deleteUserById")(dependencies),
 };

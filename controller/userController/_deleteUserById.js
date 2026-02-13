@@ -1,11 +1,11 @@
 module.exports =
   ({ pool, queryReturnError }) =>
   async (req, res, next) => {
-    const customerId = req.params.customerId;
+    const userId = req.params.userId;
 
     const result = await pool.query(
       "DELETE FROM customers_details WHERE id = $1 RETURNING name, phone, email, address",
-      [customerId],
+      [userId],
     );
 
     if (result.rowCount === 0) {

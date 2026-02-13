@@ -1,13 +1,13 @@
 module.exports =
   ({ pool, genPatchRouteQueryList }) =>
   async (req, res, next) => {
-    const customerId = req.params.customerId;
+    const userId = req.params.userId;
 
     const [updateFields, updateValues] = genPatchRouteQueryList(req.body, next);
 
     const result = await pool.query(
       `UPDATE customers_details SET ${updateFields.join(", ")} WHERE id = $${updateValues.length + 1}`,
-      [...updateValues, customerId],
+      [...updateValues, userId],
     );
 
     res.status(204).end();
