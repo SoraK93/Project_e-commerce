@@ -1,74 +1,47 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { FormInput, ToggleButton } from "../components";
+import { useState } from "react";
+import { registerAPI } from "./loginRegisterAPI";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+    isSeller: false,
+  });
+
+  const handleChange = (name, value) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    registerAPI(formData);
+    navigate("/auth/login", {
+      state: { email: formData.email },
+    });
+  };
+
   return (
     <div>
       <h1>Register Page</h1>
-      {/* add action attribute to form?? */}
-      <form method="POST">
-        <div>
-          <label htmlFor="name">Name: </label>
-          <br />
-          <input
-            id="name"
-            name="name"
-            type="name"
-            placeholder="Your full name"
-            required="true"
+      <form method="POST" onSubmit={handleSubmit}>
+        {["name", "email", "password", "phone", "address"].map((field) => (
+          <FormInput
+            name={field}
+            value={formData[field]}
+            setFunc={(val) => handleChange(field, val)}
+            key={`registrationform-${field}`}
           />
-        </div>
-
-        <div>
-          <label htmlFor="email">Email Address: </label>
-          <br />
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="E-mail address"
-            required="true"
-            autoComplete="true"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">Password (8 characters minimum): </label>
-          <br />
-          <input
-            id="password"
-            name="password"
-            type="password"
-            minLength={8}
-            required="true"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="phone">Phone Number: </label>
-          <br />
-          <input
-            id="phone"
-            name="phone"
-            type="tel"
-            pattern="{0-9}{10}"
-            placeholder="123456789"
-            required="true"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="address">Address:</label>
-          <br />
-          <textarea
-            name="address"
-            id=""
-            cols="40"
-            rows="5"
-            placeholder="Enter your delivery address here"
-            required="true"
-          ></textarea>
-        </div>
-
+        ))}
+        <ToggleButton
+          value={formData.isSeller}
+          setFunc={(val) => handleChange("isSeller", val)}
+        />
         <button>Login</button>
       </form>
       <div>
