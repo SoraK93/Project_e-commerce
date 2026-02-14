@@ -5,6 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
 const passport = require("passport");
+const pgSession = require("connect-pg-simple")(session);
 
 // import main api route
 const userRouter = require("./users");
@@ -18,6 +19,7 @@ const {
   deserialize,
   checkLoggedIn,
 } = require("../utility/api-auth");
+const pgPool = require("../model/database");
 
 dotenv.config({ quiet: true });
 
@@ -40,6 +42,10 @@ app.use(
 );
 app.use(
   session({
+    store: new pgSession({
+      pool: pgPool,
+      tableName: "session_id",
+    }),
     secret: process.env.S_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -58,7 +64,6 @@ app.use("/order", checkLoggedIn, orderRouter);
 app.use("/user", userRouter);
 app.use("/cart", checkLoggedIn, cartRouter);
 app.use("/auth", authRouter);
-
 
 // Error handling
 app.use((err, req, res, next) => {
