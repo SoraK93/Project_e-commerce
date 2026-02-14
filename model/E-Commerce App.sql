@@ -34,6 +34,15 @@ CREATE TABLE "customers_details" (
   "address" text NOT NULL
 );
 
+CREATE TABLE "session_id" (
+  "sid" varchar NOT NULL COLLATE "default",
+  "sess" json NOT NULL,
+  "expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+
+CREATE INDEX "IDX_session_expire" ON "session_id" ("expire");
+
 COMMENT ON TABLE "products" IS 'Stores all product related data';
 
 ALTER TABLE "order_details" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
@@ -43,3 +52,5 @@ ALTER TABLE "cart" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 ALTER TABLE "cart" ADD FOREIGN KEY ("customer_id") REFERENCES "customers_details" ("id");
 
 ALTER TABLE "order_details" ADD FOREIGN KEY ("customer_id") REFERENCES "customers_details" ("id");
+
+ALTER TABLE "session_id" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
