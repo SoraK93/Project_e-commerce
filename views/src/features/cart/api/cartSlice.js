@@ -40,6 +40,9 @@ const cartSlice = createSlice({
       const cart = findTargetCart(state.cartList, action.payload);
       if (cart.quantity > 1) cart.quantity--;
     },
+    cartCleanUpOnOrder: (state, action) => {
+      state.cartList = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -85,7 +88,7 @@ const cartSlice = createSlice({
   },
 });
 
-export const { increment, decrement } = cartSlice.actions;
+export const { increment, decrement, cartCleanUpOnOrder } = cartSlice.actions;
 
 export const selectCartLoading = (state) => state.cart.loading;
 export const selectCartList = (state) => state.cart.cartList;

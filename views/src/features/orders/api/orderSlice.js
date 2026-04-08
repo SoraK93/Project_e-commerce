@@ -12,6 +12,7 @@ const handleReject = (state, _) => {
 const initialState = {
   loading: "initial",
   list: [],
+  cartStatus: "empty",
 };
 
 const order = createSlice({
@@ -28,6 +29,11 @@ const order = createSlice({
 
       .addCase(createOrder.fulfilled, (state, _) => {
         state.loading = "fulfilled";
+        state.cartStatus = "fulfilled";
+      })
+      .addCase(createOrder.rejected, (state, _) => {
+        state.loading = "rejected"
+        state.cartStatus = "rejected"
       })
       // pending case
       .addMatcher(
@@ -35,10 +41,7 @@ const order = createSlice({
         handlePending,
       )
       // rejected case
-      .addMatcher(
-        isAnyOf(getOrderList.rejected, createOrder.rejected),
-        handleReject,
-      );
+      .addMatcher(isAnyOf(getOrderList.rejected), handleReject);
   },
 });
 
@@ -46,3 +49,4 @@ export default order.reducer;
 
 export const selectOrderLoading = (state) => state.order.loading;
 export const selectOrderList = (state) => state.order.list;
+export const selectOrderCartStatus = (state) => state.order.cartStatus;
