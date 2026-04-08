@@ -26,5 +26,22 @@ class OrderCreateModel(OrderNewModel):
     model_config = ConfigDict(from_attributes=True, extra='ignore')
 
 
+class OrderResponseProductModel(BaseModel):
+    id: UUID
+    name: str
+    price: float
+
+    model_config = ConfigDict(from_attributes=True, extra='ignore')
+
+
+class OrderBaseResponseModel(OrderNewModel):
+    product: OrderResponseProductModel
+
+    model_config = ConfigDict(from_attributes=True, extra='ignore')
+
+
 class OrderResponseModel(BaseModel):
-    pass
+    data: list[OrderBaseResponseModel]
+    message: str
+
+    model_config = ConfigDict(from_attributes=True, extra='ignore')

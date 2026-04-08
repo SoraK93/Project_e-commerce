@@ -12,9 +12,11 @@ router = APIRouter(
 
 
 # TODO: handle this in the order page
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/", status_code=status.HTTP_200_OK, response_model=OrderRequestModel)
 async def get_customer_order(db_session: SessionDep, user_session: valid_session_dep):
-    await order.fetch_all_customer_orders(db_session, user_session)
+    order_in_db = await order.fetch_customer_orders(db_session, user_session)
+    
+    return OrderRequestModel.model_validate(order_in_db)
 
 
 # TODO: handle this in the order page
@@ -28,6 +30,7 @@ async def get_customer_order_by_id(db_session: SessionDep, user_session: valid_s
 async def create_customer_order(db_session: SessionDep, user_session: valid_session_dep,
                                 order_data: OrderRequestModel):
     await order.create_new_order(db_session, user_session, order_data)
+
     return {"message": "Order created successfully"}
 
 
