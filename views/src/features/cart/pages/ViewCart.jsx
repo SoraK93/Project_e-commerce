@@ -26,7 +26,7 @@ const ViewCart = () => {
   };
 
   const onClickCheckout = () => {
-    navigate("/order");
+    navigate("/cart/order");
   };
 
   const onClickRemoveItem = async (cartId) => {

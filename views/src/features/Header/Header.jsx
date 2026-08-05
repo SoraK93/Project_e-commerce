@@ -42,6 +42,12 @@ const Header = () => {
                   Cart<span>({cartList?.length})</span>
                 </Link>
                 <Link
+                  to="/order"
+                  className="content-center rounded-2xl px-2 hover:bg-gray-300 hover:text-gray-800"
+                >
+                  Order
+                </Link>
+                <Link
                   to={`/user`}
                   className="content-center rounded-2xl px-2 hover:bg-gray-300 hover:text-gray-800"
                 >

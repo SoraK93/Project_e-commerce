@@ -36,7 +36,7 @@ const OrderPage = (): JSX.Element => {
     ))
     console.log(cartData)
     await dispatch(createOrder(cartData))
-    navigate("/order/place-order");
+    navigate("/cart/order/place-order");
   };
 
   return (
@@ -76,4 +76,4 @@ const OrderPage = (): JSX.Element => {
   );
 };
 
-export { OrderPage };
+export const Component = OrderPage;

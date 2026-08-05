@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
@@ -10,6 +11,8 @@ class OrderNewModel(BaseModel):
     address: str = Field(min_length=6)
     payment_status: bool
     payment_mode: Literal["Cash", "Online"]
+    ordered_on: datetime
+    cancelled_on: None | datetime
 
     model_config = ConfigDict(from_attributes=True, extra='ignore')
 
@@ -35,7 +38,8 @@ class OrderResponseProductModel(BaseModel):
 
 
 class OrderBaseResponseModel(OrderNewModel):
-    product: OrderResponseProductModel
+    id: UUID
+    products: OrderResponseProductModel
 
     model_config = ConfigDict(from_attributes=True, extra='ignore')
 

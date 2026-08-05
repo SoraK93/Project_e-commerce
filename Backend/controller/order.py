@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import HTTPException, status
 from sqlalchemy.orm import selectinload
 from sqlmodel import delete, col, select
@@ -18,12 +20,20 @@ async def fetch_customer_orders(db_session: SessionDep, user_session: SessionMod
     if not order_in_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Order list empty. Please make your first order")
-    
+
     return [OrderBaseResponseModel.model_validate(order) for order in order_in_db]
 
 
-async def fetch_order_by_id(db_session: SessionDep, user_session: SessionModel):
-    pass
+async def fetch_order_by_id(db_session: SessionDep, user_session: SessionModel, order_id: UUID):
+    result = await db_session.exec(select(OrderModel)
+                                   .where(OrderModel.id == order_id)
+                                   .options(selectinload(OrderModel.products)))
+    order_in_db = result.first()
+    if not order_in_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="")
+
+    return [OrderBaseResponseModel.model_validate(order_in_db)]
 
 
 async def create_new_order(db_session: SessionDep, user_session: SessionModel, order_data: OrderRequestModel):

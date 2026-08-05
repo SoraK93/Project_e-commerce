@@ -16,8 +16,24 @@ const getOrderList = createAsyncThunk("order/getOrderList", async () => {
   return data;
 });
 
+const getOrderById = createAsyncThunk("order/getOrderById", async (orderId) => {
+  const response = await fetch(`${ENDPOINT}/order/${orderId}`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data = await response.json();
+  console.log(data)
+  if (!response.ok)
+    return { status: response.status, statusText: response.statusText };
+
+  return data;
+});
+
 const createOrder = createAsyncThunk("order/createOrder", async (orderData) => {
-  console.log(orderData);
   const response = await fetch(`${ENDPOINT}/order/`, {
     method: "POST",
     credentials: "include",
@@ -34,4 +50,4 @@ const createOrder = createAsyncThunk("order/createOrder", async (orderData) => {
   return data;
 });
 
-export { getOrderList, createOrder };
+export { getOrderList, getOrderById, createOrder };

@@ -88,6 +88,7 @@ $ npm run dev
 :hourglass: Structure backend file in a organized manner  
 :hourglass: making sure all api follows a certain return structure  
 :hourglass: Implement auto-save feature for cart (using lodash/debounce)
+:hourglass: Seperate order table handling user and products --> using this we can have a more flexible query.
 
 ### Backend
 

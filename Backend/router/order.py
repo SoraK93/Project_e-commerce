@@ -1,8 +1,10 @@
+from uuid import UUID
+
 from fastapi import APIRouter, status
 
 import controller.order as order
 from model.database import SessionDep
-from schemas.order_schema import OrderRequestModel
+from schemas.order_schema import OrderRequestModel, OrderResponseModel
 from services.session import valid_session_dep
 
 router = APIRouter(
@@ -11,21 +13,21 @@ router = APIRouter(
 )
 
 
-# TODO: handle this in the order page
-@router.get("/", status_code=status.HTTP_200_OK, response_model=OrderRequestModel)
-async def get_customer_order(db_session: SessionDep, user_session: valid_session_dep):
+@router.get("/", status_code=status.HTTP_200_OK, response_model=OrderResponseModel)
+async def get_customer_order(db_session: SessionDep, user_session: valid_session_dep) -> OrderResponseModel:
     order_in_db = await order.fetch_customer_orders(db_session, user_session)
-    
-    return OrderRequestModel.model_validate(order_in_db)
+
+    return OrderResponseModel(data=order_in_db, message="Order list retrieved successfully")
 
 
-# TODO: handle this in the order page
-@router.get("/{order_id}", status_code=status.HTTP_200_OK)
-async def get_customer_order_by_id(db_session: SessionDep, user_session: valid_session_dep):
-    await order.fetch_order_by_id(db_session, user_session)
+@router.get("/{order_id}", status_code=status.HTTP_200_OK, response_model=OrderResponseModel)
+async def get_customer_order_by_id(db_session: SessionDep, user_session: valid_session_dep,
+                                   order_id: UUID) -> OrderResponseModel:
+    order_in_db = await order.fetch_order_by_id(db_session, user_session, order_id)
+    print("ORDER BY ID!!!!!!!!!", order_in_db)
+    return OrderResponseModel(data=order_in_db, message="Order retrieved successfully")
 
 
-# TODO: should save a new order to db
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_customer_order(db_session: SessionDep, user_session: valid_session_dep,
                                 order_data: OrderRequestModel):

@@ -18,7 +18,7 @@ export const AppRoutes = createBrowserRouter([
   {
     path: "/",
     lazy: () => import("./App"),
-    HydrateFallback: () => <div>...</div>,
+    HydrateFallback: () => fallback,
     errorElement: <ErrorPage />,
     children: [
       // Homepage
@@ -104,17 +104,27 @@ export const AppRoutes = createBrowserRouter([
       },
       {
         path: "cart",
-        lazy: () => import("../features/cart/pages/Cart"),
+        lazy: () => import("@features/cart/pages/Cart"),
         HydrateFallback: fallback,
       },
       {
-        path: "order",
-        lazy: () => import("../features/orders/Order"),
+        path: "cart/order",
+        lazy: () => import("@features/orders/pages/OrderPage"),
         HydrateFallback: () => fallback("Order"),
       },
       {
-        path: "order/place-order",
-        lazy: () => import("../features/orders/components/PlaceOrder"),
+        path: "cart/order/place-order",
+        lazy: () => import("@features/orders/components/PlaceOrder"),
+        HydrateFallback: () => fallback("Order"),
+      },
+      {
+        path: "/order",
+        lazy: () => import("@features/orders/pages/viewOrdersList"),
+        HydrateFallback: () => fallback("Order"),
+      },
+      {
+        path: "/order/:orderId",
+        lazy: () => import("@features/orders/pages/viewOrder"),
         HydrateFallback: () => fallback("Order"),
       },
     ],
