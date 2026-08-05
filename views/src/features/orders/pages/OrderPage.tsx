@@ -1,13 +1,35 @@
 import { selectCartList } from "@features/cart/api/cartSlice";
 import { selectUserInfo } from "@features/users/usersSlice";
-import { type JSX } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import type { JSX, MouseEvent } from "react";
 import { useNavigate } from "react-router";
 import { createOrder } from "../api/orderAPI";
+import { useAppDispatch, useAppSelector } from "@app/hook";
 
 export interface BtnContextInterface {
   btnText: string | null;
   setBtnText: (text: string) => void;
+}
+
+interface OrderCartItem {
+  id: string;
+  quantity: number;
+  total: number;
+  product: {
+    id: string;
+    name: string;
+  };
+}
+
+interface OrderUserInfo {
+  address: string;
+}
+
+interface CreateOrderRequest {
+  product_id: string;
+  quantity: number;
+  address: string;
+  payment_status: boolean;
+  payment_mode: "Cash" | "Online";
 }
 
 /**
@@ -18,24 +40,24 @@ export interface BtnContextInterface {
  * @returns JSX.Element
  */
 const OrderPage = (): JSX.Element => {
-  const cartList = useSelector(selectCartList);
-  const userInfo = useSelector(selectUserInfo);
+  const cartList = useAppSelector(selectCartList) as OrderCartItem[];
+  const userInfo = useAppSelector(selectUserInfo) as OrderUserInfo;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const onButtonClick = async (e): Promise<void> => {
-    e.stopPropagation()
-    const cartData = cartList.map(item => (
-      {
-        product_id: item.product.id,
-        quantity: item.quantity,
-        address: userInfo.address,
-        payment_status: false,
-        payment_mode: "Cash" // Options: Cash/Online
-      }
-    ))
-    console.log(cartData)
-    await dispatch(createOrder(cartData))
+  const onButtonClick = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
+    e.stopPropagation();
+
+    const cartData = cartList.map((item) => ({
+      product_id: item.product.id,
+      quantity: item.quantity,
+      address: userInfo.address,
+      payment_status: false,
+      payment_mode: "Cash", // Options: Cash/Online
+    })) as CreateOrderRequest[];
+
+    console.log(cartData);
+    await dispatch(createOrder(cartData));
     navigate("/cart/order/place-order");
   };
 
@@ -50,7 +72,7 @@ const OrderPage = (): JSX.Element => {
         <div>
           <h2>Item in cart</h2>
           <ul>
-            {cartList?.map((item: any) => (
+            {cartList?.map((item) => (
               <li key={item.id}>
                 <p>{item.product.name}</p>
                 <p>{item.quantity}</p>
@@ -68,7 +90,7 @@ const OrderPage = (): JSX.Element => {
           SubTotal ({cartList.length}):{" "}
           {cartList.reduce((total, item) => item.total + total, 0)}
         </p>
-        <button type="button" onClick={(e) => onButtonClick(e)}>
+        <button type="button" onClick={onButtonClick}>
           Place Order
         </button>
       </div>

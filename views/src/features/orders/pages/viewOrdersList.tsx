@@ -5,12 +5,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectOrderList } from "../api/orderSlice";
 import { useNavigate } from "react-router";
 
+interface OrderItem {
+  id: string;
+  quantity: number;
+  products: {
+    id: string;
+    name: string;
+    price: number;
+  };
+}
+
 const viewOrder = (): JSX.Element => {
-  const orderList = useSelector(selectOrderList);
+  const orderList = useSelector(selectOrderList) as OrderItem[];
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onClickItem = async (orderId) => {
+  const onClickItem = async (orderId: string): Promise<void> => {
     // on click should display more detail on specific order
     // call GET API using order id
     navigate(`/order/${orderId}`);
@@ -19,7 +29,7 @@ const viewOrder = (): JSX.Element => {
   return (
     <>
       <ul>
-        {orderList?.map((order) => {
+        {orderList?.map((order: OrderItem) => {
           return (
             <li key={order.id}>
               <div onClick={() => onClickItem(order.id)}>

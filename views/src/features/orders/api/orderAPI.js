@@ -1,6 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ENDPOINT } from "../../CONSTANT";
 
+/**
+ * @typedef {Object} CreateOrderRequest
+ * @property {string} product_id
+ * @property {number} quantity
+ * @property {string} address
+ * @property {boolean} payment_status
+ * @property {"Cash"|"Online"} payment_mode
+ */
+
 // get list of order objects
 // use cart table to create order list
 
@@ -33,6 +42,10 @@ const getOrderById = createAsyncThunk("order/getOrderById", async (orderId) => {
   return data;
 });
 
+/**
+ * @type {import("@reduxjs/toolkit").AsyncThunk<unknown, CreateOrderRequest[], {}>}
+ * @param {CreateOrderRequest[]} orderData
+ */
 const createOrder = createAsyncThunk("order/createOrder", async (orderData) => {
   const response = await fetch(`${ENDPOINT}/order/`, {
     method: "POST",

@@ -1,5 +1,6 @@
 import { type JSX } from "react";
 import { useSelector } from "react-redux";
+import type { LoaderFunctionArgs } from "react-router";
 import { selectOrderList } from "../api/orderSlice";
 import { getOrderById } from "../api/orderAPI";
 import { handleStoreDispatch } from "@utilities/route-helper";
@@ -37,7 +38,7 @@ const viewOrder = (): JSX.Element => {
   );
 };
 
-export const loader = async ({ params }) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { orderId } = params;
   return await handleStoreDispatch({ api: getOrderById, data: orderId });
 };
